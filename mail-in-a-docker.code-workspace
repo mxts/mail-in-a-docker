@@ -1,0 +1,11 @@
+{
+    "settings": {
+        "terminal.integrated.cwd": ".",
+        "explorer.excludeGitIgnore": false,
+    },
+    "folders": [       
+        {
+            "path": "."
+        }
+    ]
+}

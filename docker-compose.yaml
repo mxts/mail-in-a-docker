@@ -1,0 +1,40 @@
+services:
+  ubuntu:
+    container_name: miad
+    hostname: your-domain.com
+    build: .
+    tty: true
+    volumes:
+      - ./data:/home/user-data:rw
+      - /etc/nsd/zones:/etc/nsd/zones:rw
+      # - ./data/bind/:/etc/bind/:rw
+      # - ./data/nsd/:/etc/nsd/:rw
+      # - ./data/bind/cache:/var/cache/bind
+      # - ./data/bind/records:/var/lib/bind
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - /sys:/sys:ro
+    cgroup: host
+    restart: always
+    #    cgroupns_mode: host
+    privileged: true
+    #    pre_build_image: true
+    cap_add:
+      - SYS_ADMIN
+    # network_mode: host
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.default.disable_ipv6=0
+    ports:
+      - 25:25
+      # nsd dns (public/authoritative)
+      # bind9/named dns (local/recursive) - we want to prevent abuse from others
+      - "530:53/tcp"
+      - "538:53/udp"
+      - 810:80 # nginx http
+      - 4413:443 # nginx http
+      - 465:465 # postfix smtp
+      - 587:587 # postfix smtp
+      - 993:993 # dovecot imap
+      - 995:995
+      - 4190:4190 # dovecot/sieve
+      - 10025:10025 # spampd
